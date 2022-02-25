@@ -27,6 +27,14 @@ export class UsuarioService {
     this.googleInit();
   }
 
+  get getToken(): string {
+    return localStorage.getItem('token') || '';
+  }
+
+  get getUid(): string {
+    return this.usuario.uid || '';
+  }
+
   googleInit() {
     return new Promise((resolve: any) => {
       gapi.load('auth2', () => {
@@ -54,12 +62,10 @@ export class UsuarioService {
   }
 
   validarToken(): Observable<boolean> {
-    const token = localStorage.getItem('token') || '';
-
     return this.http
       .get(`${base_url}/login/renew`, {
         headers: {
-          'x-token': token,
+          'x-token': this.getToken,
         },
       })
       .pipe(
@@ -84,6 +90,17 @@ export class UsuarioService {
       })
     );
   }
+
+  actualizarPerfil(data: { email: string; nombre: string; role: string }) {
+    data = { ...data, role: this.usuario.role || '' };
+
+    return this.http.put(`${base_url}/usuarios/${this.getUid}`, data, {
+      headers: {
+        'x-token': this.getToken,
+      },
+    });
+  }
+
   login(formData: LoginForm) {
     // console.log('creando usuario');
     return this.http.post(`${base_url}/login`, formData).pipe(
