@@ -6,9 +6,13 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { LoginForm } from '../interfaces/login-form.interface';
+import { CargarUsuario } from '../interfaces/cargar-usuarios.interface';
+
 import { Usuario } from '../models/usuario.model';
+import Swal from 'sweetalert2';
 
 const base_url = environment.base_url;
 declare const gapi: any;
@@ -33,6 +37,14 @@ export class UsuarioService {
 
   get getUid(): string {
     return this.usuario.uid || '';
+  }
+
+  get getHeaders() {
+    return {
+      headers: {
+        'x-token': this.getToken,
+      },
+    };
   }
 
   googleInit() {
@@ -94,11 +106,11 @@ export class UsuarioService {
   actualizarPerfil(data: { email: string; nombre: string; role: string }) {
     data = { ...data, role: this.usuario.role || '' };
 
-    return this.http.put(`${base_url}/usuarios/${this.getUid}`, data, {
-      headers: {
-        'x-token': this.getToken,
-      },
-    });
+    return this.http.put(
+      `${base_url}/usuarios/${this.getUid}`,
+      data,
+      this.getHeaders
+    );
   }
 
   login(formData: LoginForm) {
@@ -117,5 +129,42 @@ export class UsuarioService {
         localStorage.setItem('token', resp.token);
       })
     );
+  }
+
+  cargarUsuarios(desde: number = 0) {
+    const url = `${base_url}/usuarios?desde=${desde}`;
+    return this.http.get<CargarUsuario>(url, this.getHeaders).pipe(
+      // mapear la respuesta para crear una nueva instancia de la clase usuario
+      map((resp) => {
+        // mapear el array de usuarios para crear la instancia de usuario en cada resultado
+        const usuarios = resp.usuarios.map(
+          (user) =>
+            new Usuario(
+              user.nombre,
+              user.email,
+              '',
+              user.img,
+              user.google,
+              user.role,
+              user.uid
+            )
+        );
+        return { total: resp.total, usuarios };
+      })
+    );
+  }
+
+  actualizarUsuario(usuario: Usuario) {
+    return this.http.put(
+      `${base_url}/usuarios/${usuario.uid}`,
+      usuario,
+      this.getHeaders
+    );
+  }
+
+  eliminarUsuario(usuario: Usuario) {
+    // console.log('Eliminando', usuario);
+    const url = `${base_url}/usuarios/${usuario.uid}`;
+    return this.http.delete(url, this.getHeaders);
   }
 }
