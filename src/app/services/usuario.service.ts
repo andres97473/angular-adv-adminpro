@@ -6,8 +6,10 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 import { environment } from '../../environments/environment';
+
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { LoginForm } from '../interfaces/login-form.interface';
+import { CargarUsuario } from '../interfaces/cargar-usuarios.interface';
 import { Usuario } from '../models/usuario.model';
 
 const base_url = environment.base_url;
@@ -33,6 +35,14 @@ export class UsuarioService {
 
   get getUid(): string {
     return this.usuario.uid || '';
+  }
+
+  get getHeaders() {
+    return {
+      headers: {
+        'x-token': this.getToken,
+      },
+    };
   }
 
   googleInit() {
@@ -115,6 +125,30 @@ export class UsuarioService {
     return this.http.post(`${base_url}/login/google`, { token }).pipe(
       tap((resp: any) => {
         localStorage.setItem('token', resp.token);
+      })
+    );
+  }
+
+  cargarUsuarios(desde: number = 0) {
+    // http://localhost:3000/api/usuarios?desde=0
+    const url = `${base_url}/usuarios?desde=${desde}`;
+    return this.http.get<CargarUsuario>(url, this.getHeaders).pipe(
+      map((resp) => {
+        // console.log(resp);
+        const usuarios = resp.usuarios.map(
+          (user) =>
+            new Usuario(
+              user.nombre,
+              user.email,
+              '',
+              user.img,
+              user.google,
+              user.role,
+              user.uid
+            )
+        );
+
+        return { total: resp.total, usuarios };
       })
     );
   }

@@ -16,14 +16,14 @@ export class Usuario {
   get getImagenUrl() {
     // /upload/usuarios/no-image
 
-    if (this.img?.includes('https')) {
+    if (!this.img) {
+      return `${base_url}/upload/usuarios/no-image`;
+    } else if (this.img?.includes('https')) {
       // console.log(this.img);
       // console.log('google');
 
       return this.img;
-    }
-
-    if (this.img) {
+    } else if (this.img) {
       // console.log(this.img);
       // console.log('local');
 

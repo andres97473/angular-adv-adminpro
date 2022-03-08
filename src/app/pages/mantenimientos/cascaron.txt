@@ -6,15 +6,13 @@
           type="text"
           class="form-control"
           placeholder="Buscar Usuario..."
-          #txtTermino
-          (keyup)="buscar(txtTermino.value)"
         />
       </div>
     </div>
   </div>
 </div>
 
-<div class="row animated fadeIn fast" *ngIf="cargando">
+<div class="row animated fadeIn fast">
   <div class="col-12">
     <div class="alert alert-info text-center">
       <h4 class="alert-heading">Cargando</h4>
@@ -24,49 +22,33 @@
   </div>
 </div>
 
-<div class="row animated fadeIn fast" *ngIf="!cargando">
+<div class="row">
   <div class="col-12">
     <div class="card">
       <div class="card-body">
-        <h4 class="card-title">
-          Total de usuarios ({{ totalUsuarios }}) - de {{ desde + 1 }} hasta
-          {{ desde + 5 }}
-        </h4>
+        <h4 class="card-title">Usuarios</h4>
         <h6 class="card-subtitle">Usuarios registrados en mi aplicacion</h6>
         <div class="table-responsive">
           <table class="table table-bordered">
             <thead>
               <tr>
-                <th class="w100">Avatar</th>
+                <th>Avatar</th>
                 <th>Correo</th>
                 <th>Nombre</th>
-                <th class="w100">Role</th>
-                <th class="w100">Auth</th>
-                <th class="text-nowrap w100">Acciones</th>
+                <th>Role</th>
+                <th>Auth</th>
+                <th class="text-nowrap">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let usuario of usuarios">
-                <td class="text-center">
-                  <img
-                    [src]="usuario.getImagenUrl"
-                    alt="Avatar de usuario"
-                    class="avatar"
-                  />
-                </td>
-                <td>{{ usuario.email }}</td>
-                <td>{{ usuario.nombre }}</td>
-                <td>{{ usuario.role }}</td>
-                <td>
-                  <span *ngIf="usuario.google" class="label label-danger"
-                    >Google</span
-                  >
-                  <span *ngIf="!usuario.google" class="label label-info"
-                    >Email</span
-                  >
-                </td>
+              <tr>
+                <td>Lunar probe project</td>
+                <td>Lunar probe project</td>
+                <td>Lunar probe project</td>
+                <td>Lunar probe project</td>
+                <td>Lunar probe project</td>
 
-                <td class="text-nowrap text-center">
+                <td class="text-nowrap">
                   <a
                     href="#"
                     data-toggle="tooltip"
@@ -87,13 +69,9 @@
           </table>
         </div>
 
-        <button (click)="cambiarPagina(-5)" class="btn btn-secondary">
-          Anteriores
-        </button>
+        <button class="btn btn-secondary">Anteriores</button>
         &nbsp;
-        <button (click)="cambiarPagina(5)" class="btn btn-secondary">
-          Siguientes
-        </button>
+        <button class="btn btn-secondary">Siguientes</button>
       </div>
     </div>
   </div>
