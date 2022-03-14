@@ -1,27 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { delay } from 'rxjs/operators';
 import Swal from 'sweetalert2';
-import { UsuarioService } from '../../../services/usuario.service';
 import { Usuario } from '../../../models/usuario.model';
+import { UsuarioService } from '../../../services/usuario.service';
 import { BusquedasService } from '../../../services/busquedas.service';
+import { ModalImagenService } from '../../../services/modal-imagen.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-usuarios',
   templateUrl: './usuarios.component.html',
   styles: [],
 })
-export class UsuariosComponent implements OnInit {
+export class UsuariosComponent implements OnInit, OnDestroy {
   public totalUsuarios = 0;
   public usuarios: Usuario[] = [];
   public usuariosTemp: Usuario[] = [];
+  public imgSubs?: Subscription;
   public desde = 0;
   public cargando = true;
   constructor(
     private usuarioService: UsuarioService,
-    private busquedasService: BusquedasService
+    private busquedasService: BusquedasService,
+    private modalImagenService: ModalImagenService
   ) {}
+
+  ngOnDestroy(): void {
+    this.imgSubs?.unsubscribe;
+  }
 
   ngOnInit(): void {
     this.cargarUsuarios();
+    this.imgSubs = this.modalImagenService.nuevaImagen
+      .pipe(delay(200))
+      .subscribe((img) => {
+        this.cargarUsuarios();
+      });
   }
 
   cargarUsuarios() {
@@ -83,5 +97,16 @@ export class UsuariosComponent implements OnInit {
         });
       }
     });
+  }
+
+  cambiarRole(usuario: Usuario) {
+    this.usuarioService.guardarUsuario(usuario).subscribe((resp) => {
+      console.log(resp);
+    });
+  }
+
+  abrirModal(usuario: Usuario) {
+    // console.log(usuario);
+    this.modalImagenService.abrirModal('usuarios', usuario.uid, usuario.img);
   }
 }

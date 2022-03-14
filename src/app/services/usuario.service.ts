@@ -102,13 +102,16 @@ export class UsuarioService {
   }
 
   actualizarPerfil(data: { email: string; nombre: string; role: string }) {
-    data = { ...data, role: this.usuario.role || '' };
+    data = {
+      ...data,
+      role: this.usuario.role || '',
+    };
 
-    return this.http.put(`${base_url}/usuarios/${this.getUid}`, data, {
-      headers: {
-        'x-token': this.getToken,
-      },
-    });
+    return this.http.put(
+      `${base_url}/usuarios/${this.getUid}`,
+      data,
+      this.getHeaders
+    );
   }
 
   login(formData: LoginForm) {
@@ -157,5 +160,13 @@ export class UsuarioService {
     //http://localhost:3000/api/usuarios/621047dca9658316bfe6aeff
     const url = `${base_url}/usuarios/${usuario.uid}`;
     return this.http.delete(url, this.getHeaders);
+  }
+
+  guardarUsuario(usuario: Usuario) {
+    return this.http.put(
+      `${base_url}/usuarios/${usuario.uid}`,
+      usuario,
+      this.getHeaders
+    );
   }
 }
