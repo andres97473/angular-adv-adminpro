@@ -16,7 +16,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   public totalUsuarios = 0;
   public usuarios: Usuario[] = [];
   public usuariosTemp: Usuario[] = [];
-  public imgSubs?: Subscription;
+  private imgSubs?: Subscription;
   public desde = 0;
   public cargando = true;
   constructor(
@@ -68,7 +68,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
     this.busquedasService
       .buscar('usuarios', termino)
-      .subscribe((resultados) => {
+      .subscribe((resultados: any) => {
         this.usuarios = resultados;
       });
   }

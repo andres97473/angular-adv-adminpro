@@ -5,7 +5,9 @@
         <input
           type="text"
           class="form-control"
-          placeholder="Buscar Usuario..."
+          placeholder="Buscar Hospitales..."
+          #txtTermino
+          (keyup)="buscar(txtTermino.value)"
         />
       </div>
     </div>
@@ -33,8 +35,8 @@
               Hospitales registrados en mi aplicacion
             </h6>
           </div>
-          <div class="col">
-            <button class="btn btn-primary">
+          <div class="col text-right">
+            <button class="btn btn-primary" (click)="abrirSweetAlert()">
               <i class="fa fa-hospital-o"></i> Crear hospital
             </button>
           </div>
@@ -55,7 +57,8 @@
                   <img
                     [src]="hospital.img | imagen: 'hospitales'"
                     [alt]="hospital.nombre"
-                    class="avatar cursor"
+                    class="w100 cursor"
+                    (click)="abrirModal(hospital)"
                   />
                 </td>
                 <td>
@@ -68,16 +71,18 @@
                 </td>
                 <td class="text-nowrap text-center">
                   <a
-                    href="#"
+                    (click)="guardarCambios(hospital)"
                     data-toggle="tooltip"
                     data-original-title="Guardar cambios"
+                    class="cursor"
                   >
                     <i class="fa fa-pencil text-inverse m-r-10"></i>
                   </a>
                   <a
-                    href="#"
+                    (click)="eliminarHospital(hospital)"
                     data-toggle="tooltip"
                     data-original-title="Borrar"
+                    class="cursor"
                   >
                     <i class="fa fa-close text-danger"></i>
                   </a>
