@@ -74,7 +74,7 @@ const routes: Routes = [
       {
         path: 'medico/:id',
         component: MedicoComponent,
-        data: { titulo: 'Actualizar Medico' },
+        data: { titulo: 'Mantenimiento de Medico' },
       },
     ],
   },

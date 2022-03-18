@@ -34,16 +34,16 @@ export class MedicoService {
     );
   }
 
-  crearMedico(medico: Medico) {
+  crearMedico(medico: { nombre: string; hospital: string }) {
     // http://localhost:3000/api/medicos
     const url = `${base_url}/medicos`;
-    return this.http.post(url, { medico }, this.getHeaders);
+    return this.http.post(url, medico, this.getHeaders);
   }
 
   actualizarMedico(medico: Medico) {
     // http://localhost:3000/api/medicos
     const url = `${base_url}/medicos/${medico._id}`;
-    return this.http.put(url, { medico }, this.getHeaders);
+    return this.http.put(url, medico, this.getHeaders);
   }
 
   borrarMedico(_id: string) {

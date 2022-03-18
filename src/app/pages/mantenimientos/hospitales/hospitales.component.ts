@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { delay } from 'rxjs/operators';
 import Swal from 'sweetalert2';
@@ -12,7 +12,7 @@ import { BusquedasService } from '../../../services/busquedas.service';
   templateUrl: './hospitales.component.html',
   styles: [],
 })
-export class HospitalesComponent implements OnInit {
+export class HospitalesComponent implements OnInit, OnDestroy {
   public hospitales: Hospital[] = [];
   public hospitalesTemp: Hospital[] = [];
   private imgSubs?: Subscription;
@@ -23,6 +23,9 @@ export class HospitalesComponent implements OnInit {
     private busquedasService: BusquedasService,
     private modalImagenService: ModalImagenService
   ) {}
+  ngOnDestroy(): void {
+    this.imgSubs?.unsubscribe();
+  }
 
   ngOnInit(): void {
     this.cargarHospitales();
