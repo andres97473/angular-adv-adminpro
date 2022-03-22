@@ -11,18 +11,17 @@ declare function customInitFunctions(): any;
   styles: [],
 })
 export class SidebarComponent implements OnInit {
-  public menuItems: any[] = [];
   public usuario: Usuario;
   constructor(
-    private _sidebarService: SidebarService,
+    public sidebarService: SidebarService,
     private _usuarioService: UsuarioService
   ) {
-    this.menuItems = _sidebarService.menu;
+    // this.menuItems = _sidebarService.menu;
     //console.log(this.menuItems);
     this.usuario = _usuarioService.usuario;
   }
 
   ngOnInit(): void {
-    customInitFunctions();
+    // customInitFunctions();
   }
 }
