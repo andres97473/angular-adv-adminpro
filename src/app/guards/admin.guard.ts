@@ -21,6 +21,7 @@ export class AdminGuard implements CanActivate {
 
     if (this.usuarioService.getRole === 'ADMIN_ROLE') {
       return true;
+      // sino devolver al dashboard
     } else {
       this.router.navigateByUrl('/dashboard');
       return false;
